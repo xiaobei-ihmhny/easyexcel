@@ -22,6 +22,9 @@ public class DataUtil {
             da.add(Integer.valueOf(2233+i));
             da.add(Double.valueOf(2233.00+i));
             da.add(Float.valueOf(2233.0f+i));
+            da.add(Float.valueOf(2233.0f+i));
+            da.add(Float.valueOf(2233.0f+i));
+            da.add(Float.valueOf(2233.0f+i));
             da.add(new Date());
             da.add(new BigDecimal("3434343433554545"+i));
             da.add(Short.valueOf((short)i));
