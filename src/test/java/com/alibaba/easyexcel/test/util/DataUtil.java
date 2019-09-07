@@ -33,6 +33,23 @@ public class DataUtil {
         return object;
     }
 
+    public static List<List<String>> createTestListString() {
+        List<List<String>> object = new ArrayList<List<String>>();
+        for (int i = 0; i < 1000; i++) {
+            List<String> da = new ArrayList<String>();
+            da.add("字符串"+i);
+            da.add(String.valueOf(187837834l+i));
+            da.add(String.valueOf(2233+i));
+            da.add(String.valueOf(2233.00+i));
+            da.add(String.valueOf(2233.0f+i));
+            da.add(String.valueOf(2233.0f+i));
+            da.add(String.valueOf(2233.0f+i));
+            da.add(String.valueOf(2233.0f+i));
+            object.add(da);
+        }
+        return object;
+    }
+
     public static List<List<String>> createTestListStringHead(){
         //写sheet3  模型上没有注解，表头数据动态传入
         List<List<String>> head = new ArrayList<List<String>>();
@@ -42,12 +59,12 @@ public class DataUtil {
         List<String> headCoulumn4 = new ArrayList<String>();
         List<String> headCoulumn5 = new ArrayList<String>();
 
-        headCoulumn1.add("第一列");headCoulumn1.add("第一列");headCoulumn1.add("第一列");
+        headCoulumn1.add("第一列");headCoulumn1.add("第一列");headCoulumn1.add("第一列323");
         headCoulumn2.add("第一列");headCoulumn2.add("第一列");headCoulumn2.add("第一列");
 
         headCoulumn3.add("第二列");headCoulumn3.add("第二列");headCoulumn3.add("第二列");
-        headCoulumn4.add("第三列");headCoulumn4.add("第三列2");headCoulumn4.add("第三列2");
-        headCoulumn5.add("第一列");headCoulumn5.add("第3列");headCoulumn5.add("第4列");
+        headCoulumn4.add("第三列");headCoulumn4.add("第三列2");headCoulumn4.add("第三列22222");
+        headCoulumn5.add("第一列");headCoulumn5.add("第3列");headCoulumn5.add("第4112列");
 
         head.add(headCoulumn1);
         head.add(headCoulumn2);

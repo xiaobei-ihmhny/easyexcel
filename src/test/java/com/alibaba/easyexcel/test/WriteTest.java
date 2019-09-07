@@ -20,7 +20,7 @@ public class WriteTest {
 
     @Test
     public void writeV2007() throws IOException {
-        OutputStream out = new FileOutputStream("C:\\Users\\xiaobei\\Desktop\\2007.xlsx");
+        OutputStream out = new FileOutputStream("C:\\Users\\Legend\\Desktop\\2007.xlsx");
         ExcelWriter writer = EasyExcelFactory.getWriter(out);
         //写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
         Sheet sheet1 = new Sheet(1, 3);
@@ -28,11 +28,9 @@ public class WriteTest {
 
         //设置列宽 设置每列的宽度
         Map columnWidth = new HashMap();
-        columnWidth.put(0,300);
-        columnWidth.put(1,400);
-        columnWidth.put(2,100);
-        columnWidth.put(3,100);
-        sheet1.setColumnWidthMap(columnWidth);
+
+//        columnWidth.put(0,10000);columnWidth.put(1,40000);columnWidth.put(2,10000);columnWidth.put(3,10000);
+//        sheet1.setColumnWidthMap(columnWidth);
         sheet1.setHead(createTestListStringHead());
         //or 设置自适应宽度
         //sheet1.setAutoWidth(Boolean.TRUE);
@@ -68,7 +66,7 @@ public class WriteTest {
     @Test
     public void writeV2007WithTemplate() throws IOException {
         InputStream inputStream = FileUtil.getResourcesFileInputStream("temp.xlsx");
-        OutputStream out = new FileOutputStream("C:\\Users\\xiaobei\\Desktop\\2007.xlsx");
+        OutputStream out = new FileOutputStream("C:\\Users\\Legend\\Desktop\\2007.xlsx");
         ExcelWriter writer = EasyExcelFactory.getWriterWithTemp(inputStream,out,ExcelTypeEnum.XLSX,true);
         //写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
         Sheet sheet1 = new Sheet(1, 3);
@@ -86,7 +84,7 @@ public class WriteTest {
 
         //写第二个sheet sheet2  模型上打有表头的注解，合并单元格
         Sheet sheet2 = new Sheet(2, 3, WriteModel.class, "第二个sheet", null);
-        sheet2.setTableStyle(createTableStyle());
+//        sheet2.setTableStyle(createTableStyle());
         sheet2.setStartRow(20);
         writer.write(createTestListJavaMode(), sheet2);
 
