@@ -110,7 +110,7 @@ public class WriteTest {
     @Test
     public void writeV2007WithTemplateAndHandler() throws IOException {
         InputStream inputStream = FileUtil.getResourcesFileInputStream("temp.xlsx");
-        OutputStream out = new FileOutputStream("C:\\Users\\Legend\\Desktop\\2007.xlsx");
+        OutputStream out = new FileOutputStream("C:\\Users\\xiaobei\\Desktop\\2007.xlsx");
         ExcelWriter writer = EasyExcelFactory.getWriterWithTempAndHandler(inputStream,out,ExcelTypeEnum.XLSX,true,
             new AfterWriteHandlerImpl());
         //写第一个sheet, sheet1  数据全是List<String> 无模型映射关系

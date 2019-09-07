@@ -41,8 +41,64 @@ public class MyFilingTest {
 
 
     @Test
+    public void testPOIAndEasyExcelTogether() throws Exception {
+        // 1. 先用poi填充表头并生成临时excel文件
+        poiSetHeader();
+        // 2. 使用easyexcel读取poi填充好的表头，并填充列表数据
+        easyExcelSetList();
+    }
+
+    @Test
+    public void easyExcelSetList() throws Exception {
+        InputStream inputStream = FileUtil.getResourcesFileInputStream("2007-temp.xlsx");
+        OutputStream out = new FileOutputStream("C:\\Users\\xiaobei\\Desktop\\2007-1.xlsx");
+        ExcelWriter writer = EasyExcelFactory.getWriterWithTemp(inputStream,out,ExcelTypeEnum.XLSX,true);
+        //写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
+        Sheet sheet1 = new Sheet(1, 9);
+        sheet1.setSheetName("第一个sheet");
+        sheet1.setStartRow(9);
+        //or 设置自适应宽度
+        sheet1.setAutoWidth(Boolean.FALSE);
+        writer.write1(createTestListObject(), sheet1);
+
+        writer.finish();
+        out.close();
+    }
+
+    /**
+     * 使用poi设置header
+     * @throws IOException
+     */
+    private void poiSetHeader() throws IOException {
+        InputStream fis = FileUtil.getResourcesFileInputStream("工作簿1.xlsx");
+        XSSFWorkbook workBookTemp = new XSSFWorkbook(fis);
+        OutputStream out = new FileOutputStream("C:\\Users\\xiaobei\\Desktop\\2007.xlsx");
+        XSSFSheet sheetTemp = workBookTemp.getSheetAt(0);
+
+        // 新建excel
+        XSSFWorkbook workBook = new XSSFWorkbook();
+        workBook = workBookTemp;
+        XSSFSheet sheet = workBook.getSheetAt(0);
+        sheet.getRow(1).getCell(2).setCellValue("小贝贝");
+        sheet.getRow(2).getCell(2).setCellValue("13683501521");
+        sheet.getRow(3).getCell(2).setCellValue("中华人民共和国");
+        sheet.getRow(1).getCell(13).setCellValue("央财平台");
+        sheet.getRow(2).getCell(13).setCellValue("2019-10-11 11:12:13");
+        sheet.getRow(3).getCell(13).setCellValue("小慧慧");
+        sheet.getRow(4).getCell(2).setCellValue("北京市海淀区北苑家园");
+        sheet.getRow(5).getCell(2).setCellValue("这是一个备注");
+        try {
+            workBookTemp.write(out);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
     public void writeV2007() throws IOException {
-        OutputStream out = new FileOutputStream("C:\\Users\\Legend\\Desktop\\2007.xlsx");
+        OutputStream out = new FileOutputStream("C:\\Users\\xiaobei\\Desktop\\2007.xlsx");
         ExcelWriter writer = EasyExcelFactory.getWriter(out);
         //写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
         Sheet sheet1 = new Sheet(1, 9);
@@ -359,7 +415,7 @@ public class MyFilingTest {
         //写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
         Sheet sheet1 = new Sheet(1, 3);
 //        sheet1.setSheetName("报备单列表");
-//        sheet1.setStartRow(1);
+        sheet1.setStartRow(10);
 
         //or 设置自适应宽度
         //sheet1.setAutoWidth(Boolean.TRUE);
@@ -388,7 +444,6 @@ public class MyFilingTest {
 
         //写第三个sheet包含多个table情况
         Sheet sheet = new Sheet(1, 0);
-
         TableStyle tableStyle = sheet.getTableStyle();
         sheet.setSheetName("第一个sheet");
         sheet.setStartRow(2);
@@ -411,7 +466,7 @@ public class MyFilingTest {
     public void testPOIExport() throws Exception {
         InputStream fis = FileUtil.getResourcesFileInputStream("报备订单信息导出模板.xlsx");
         XSSFWorkbook workBookTemp = new XSSFWorkbook(fis);
-        OutputStream out = new FileOutputStream("C:\\Users\\Legend\\Desktop\\报备-2007.xlsx");
+        OutputStream out = new FileOutputStream("C:\\Users\\xiaobei\\Desktop\\2007.xlsx");
         XSSFSheet sheetTemp = workBookTemp.getSheetAt(0);
 
         // 新建excel
@@ -429,10 +484,10 @@ public class MyFilingTest {
         List<List<String>> testListObject = createTestListString();
         for (int row = 0; row < testListObject.size(); row++) {
             List<String> objects = testListObject.get(row);
-            XSSFRow row1 = sheet.getRow(row + 9);
+            XSSFRow row1 = sheet.createRow(row + 9);
             for (int i = 0; i < objects.size(); i++) {
                 CellCopyPolicy cellCopyPolicy = new CellCopyPolicy();
-                row1.getCell(i).setCellValue(objects.get(i));
+                row1.createCell(i).setCellValue(objects.get(i));
             }
         }
 
@@ -441,7 +496,6 @@ public class MyFilingTest {
 //        sheet.addMergedRegion(region3);
 //        sheet.createRow(1).createCell(2).setCellValue("小贝贝");
         try {
-            out = new FileOutputStream("C:\\Users\\Legend\\Desktop\\报备-2007.xlsx");
             workBookTemp.write(out);
             out.close();
         } catch (Exception e) {
