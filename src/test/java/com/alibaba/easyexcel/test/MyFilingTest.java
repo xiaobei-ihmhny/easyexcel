@@ -10,17 +10,17 @@ import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.metadata.Table;
 import com.alibaba.excel.metadata.TableStyle;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellCopyPolicy;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.PictureData;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.junit.Test;
+import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -464,6 +464,7 @@ public class MyFilingTest {
 
     @Test
     public void testPOIExport() throws Exception {
+        Map<String, PictureData> map = new HashMap<String, PictureData>();
         InputStream fis = FileUtil.getResourcesFileInputStream("报备订单信息导出模板.xlsx");
         XSSFWorkbook workBookTemp = new XSSFWorkbook(fis);
         OutputStream out = new FileOutputStream("C:\\Users\\xiaobei\\Desktop\\2007.xlsx");
@@ -481,13 +482,22 @@ public class MyFilingTest {
         sheet.getRow(3).getCell(13).setCellValue("小慧慧");
         sheet.getRow(4).getCell(2).setCellValue("北京市海淀区北苑家园");
         sheet.getRow(5).getCell(2).setCellValue("这是一个备注");
-        List<List<String>> testListObject = createTestListString();
-        for (int row = 0; row < testListObject.size(); row++) {
-            List<String> objects = testListObject.get(row);
-            XSSFRow row1 = sheet.createRow(row + 9);
-            for (int i = 0; i < objects.size(); i++) {
-                CellCopyPolicy cellCopyPolicy = new CellCopyPolicy();
-                row1.createCell(i).setCellValue(objects.get(i));
+        List<POIXMLDocumentPart> relations = sheet.getRelations();
+        int i = 1;
+        for(POIXMLDocumentPart part : relations) {
+            if (part instanceof XSSFDrawing) {
+                XSSFDrawing drawing = (XSSFDrawing) part;
+                List<XSSFShape> shapes = drawing.getShapes();
+                for (XSSFShape shape : shapes) {
+                    XSSFPicture picture = (XSSFPicture) shape;
+                    XSSFClientAnchor anchor = picture.getPreferredSize();
+                    CTMarker marker = anchor.getFrom();
+                    String key = marker.getRow() + "-" + marker.getCol() + (i++);
+                    XSSFPictureData pictureData = picture.getPictureData();
+                    map.put(key,pictureData);
+                    printImg(map);
+                    System.out.println(key);
+                }
             }
         }
 
@@ -495,12 +505,36 @@ public class MyFilingTest {
 //        CellRangeAddress region3 = new CellRangeAddress(1, 1, (short) 2, (short) 11);
 //        sheet.addMergedRegion(region3);
 //        sheet.createRow(1).createCell(2).setCellValue("小贝贝");
-        try {
-            workBookTemp.write(out);
+//        try {
+//            workBookTemp.write(out);
+//            out.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    //图片写出
+    public static void printImg(Map<String, PictureData> sheetList) throws IOException {
+
+        //for (Map<String, PictureData> map : sheetList) {
+        Object key[] = sheetList.keySet().toArray();
+        for (int i = 0; i < sheetList.size(); i++) {
+            // 获取图片流
+            PictureData pic = sheetList.get(key[i]);
+            // 获取图片索引
+            String picName = key[i].toString();
+            // 获取图片格式
+            String ext = pic.suggestFileExtension();
+
+            byte[] data = pic.getData();
+
+            //图片保存路径
+            FileOutputStream out = new FileOutputStream("D:" + picName +  i + "." + ext);
+            out.write(data);
             out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        // }
+
     }
 
     @Test
