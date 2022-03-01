@@ -32,6 +32,7 @@ public class ReadTest {
 
     /**
      * 最简单的读
+     * FIXME 这种读法要求实体对象的类型与表中数据的类型按顺序一一对应，否则会出现异常，不建议使用这种方式！！
      * <p>
      * 1. 创建excel对应的实体对象 参照{@link DemoData}
      * <p>
@@ -45,6 +46,7 @@ public class ReadTest {
         // 写法1：
         String fileName = TestFileUtil.getPath() + "demo" + File.separator + "demo.xlsx";
         // 这里 需要指定读用哪个class去读，然后读取第一个sheet 文件流会自动关闭
+        // FIXME 也可以在sheet()中指定index或名称
         EasyExcel.read(fileName, DemoData.class, new DemoDataListener()).sheet().doRead();
 
         // 写法2：
@@ -64,6 +66,7 @@ public class ReadTest {
 
     /**
      * 指定列的下标或者列名
+     * TODO 通过注解的方式来指定各字段与表格中各列的对应关系，推荐使用这种方式！！！
      *
      * <p>
      * 1. 创建excel对应的实体对象,并使用{@link ExcelProperty}注解. 参照{@link IndexOrNameData}
