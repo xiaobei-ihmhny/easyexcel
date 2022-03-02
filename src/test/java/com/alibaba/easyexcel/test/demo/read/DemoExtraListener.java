@@ -19,10 +19,14 @@ public class DemoExtraListener extends AnalysisEventListener<DemoExtraData> {
     private static final Logger LOGGER = LoggerFactory.getLogger(DemoDataListener.class);
 
     @Override
-    public void invoke(DemoExtraData data, AnalysisContext context) {}
+    public void invoke(DemoExtraData data, AnalysisContext context) {
+        LOGGER.info("调用invoke方法，数据为：{}", JSON.toJSONString(data));
+    }
 
     @Override
-    public void doAfterAllAnalysed(AnalysisContext context) {}
+    public void doAfterAllAnalysed(AnalysisContext context) {
+        LOGGER.info("调用 doAfterAllAnalysed 方法");
+    }
 
     @Override
     public void extra(CellExtra extra, AnalysisContext context) {

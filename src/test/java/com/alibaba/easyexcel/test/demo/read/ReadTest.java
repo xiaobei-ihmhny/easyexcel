@@ -164,6 +164,7 @@ public class ReadTest {
 
     /**
      * 读取表头数据
+     * FIXME 这个好，可用于验证表格是否满足要求
      *
      * <p>
      * 1. 创建excel对应的实体对象 参照{@link DemoData}
@@ -181,6 +182,7 @@ public class ReadTest {
 
     /**
      * 额外信息（批注、超链接、合并单元格信息读取）
+     * FIXME 超链接为什么读取不到？？？
      * <p>
      * 由于是流式读取，没法在读取到单元格数据的时候直接读取到额外信息，所以只能最后通知哪些单元格有哪些额外信息
      *
@@ -244,6 +246,7 @@ public class ReadTest {
 
     /**
      * 同步的返回，不推荐使用，如果数据量大会把数据放到内存里面
+     * FIXME 同步返回的场景是什么？？？
      */
     @Test
     public void synchronousRead() {
